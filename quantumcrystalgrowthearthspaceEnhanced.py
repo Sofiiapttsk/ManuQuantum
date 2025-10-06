@@ -13,18 +13,16 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 from PyQt5.QtOpenGL import QGLWidget
 
-# ==============================
-# DEBUG / SAFETY FLAGS (PATCH)
-# ==============================
+# DEBUG  
+
 DEBUG_MODE = False  # set True to get console prints
 
 def dprint(*a):
     if DEBUG_MODE:
         print("[DEBUG]", *a)
 
-# =========================================================================================
-# PHYSICAL / MODEL PARAMETERS
-# =========================================================================================
+# PHYSICAL MODEL PARAMETERS
+
 RANDOM_SEED = 1234
 random.seed(RANDOM_SEED)
 
@@ -50,9 +48,9 @@ QUALITY_WEIGHT_TEMP = 0.30
 QUALITY_WEIGHT_ACOUSTIC = 0.15
 QUALITY_WEIGHT_DEFECT = 0.20
 
-# =========================================================================================
-# MATERIALS (Unicode fixed)
-# =========================================================================================
+
+# MATERIALS 
+
 QUANTUM_MATERIALS = {
     "Topological Insulator (Bi₂Se₃)": {
         "melting_point": 705,
@@ -95,12 +93,12 @@ QUANTUM_MATERIALS = {
     },
 }
 
-# Safe fallback material if a key mismatch occurs (PATCH)
+# Safe fallback material if a key mismatch occurs 
 FALLBACK_MATERIAL_KEY = list(QUANTUM_MATERIALS.keys())[0]
 
-# =========================================================================================
+
 # Utility
-# =========================================================================================
+
 def clamp(v, lo, hi):
     return lo if v < lo else hi if v > hi else v
 
@@ -122,9 +120,9 @@ def get_material_data(name):
     dprint("Material key missing:", name, "falling back to", FALLBACK_MATERIAL_KEY)
     return QUANTUM_MATERIALS[FALLBACK_MATERIAL_KEY]
 
-# =========================================================================================
+
 # 2D Convection Visualizer
-# =========================================================================================
+
 class ConvectionVisualizer(QWidget):
     def __init__(self, simulation_ref, parent=None):
         super(ConvectionVisualizer, self).__init__(parent)
@@ -172,7 +170,7 @@ class ConvectionVisualizer(QWidget):
         return vr * scale, vt * scale
 
     def update_particles(self):
-        # PATCH: guard simulation existence + try/except to catch key errors cleanly
+        # guard simulation existence + try/except to catch key errors cleanly
         if not self.isVisible():
             return
         if not hasattr(self.simulation, "material"):
@@ -197,7 +195,7 @@ class ConvectionVisualizer(QWidget):
             p['x'] = (p['x'] + 1.0) % 1.0
             p['y'] = (p['y'] + 1.0) % 1.0
 
-        # Material lookup with fallback (PATCH)
+        # Material lookup with fallback 
         mat = get_material_data(getattr(self.simulation, "material", FALLBACK_MATERIAL_KEY))
 
         for d in self.dopants:
@@ -218,7 +216,7 @@ class ConvectionVisualizer(QWidget):
         self.update()
 
     def paintEvent(self, event):
-        # Robustness: if simulation not ready, skip
+        # Robustness:if simulation not ready - skip
         if not hasattr(self.simulation, "growth_progress"):
             return
         painter = QPainter(self)
@@ -289,9 +287,8 @@ class ConvectionVisualizer(QWidget):
         painter.drawText(10, 20, title)
 
 
-# =========================================================================================
 # 3D Simulation Widget (unchanged core + small visibility guard PATCH)
-# =========================================================================================
+
 class CrystalGrowthSimulation(QGLWidget):
     def __init__(self, parent=None):
         super(CrystalGrowthSimulation, self).__init__(parent)
@@ -920,9 +917,8 @@ class CrystalGrowthSimulation(QGLWidget):
         self.updateGL()
 
 
-# =========================================================================================
 # Main Window
-# =========================================================================================
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
