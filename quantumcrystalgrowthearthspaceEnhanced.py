@@ -79,7 +79,7 @@ QUANTUM_MATERIALS = {
         "space_advantages": ["Homogeneous oxygen distribution", "Reduced phase separation"]
     },
     "Quantum Spin Liquid (α-RuCl₃)": {
-        "melting_point": 850,
+        "melting_point": 750,
         "crystal_structure": "Honeycomb Lattice",
         "growth_rate": 0.3,
         "color": (0.8, 0.2, 0.5),
